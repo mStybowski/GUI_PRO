@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GUI</title>
+
+    <style>
+
+
+        body{
+            background-color: rgb(43, 49, 49);
+        }
+
+        button{
+            padding: 3px 12px;
+        }
+
+        .green{
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .red{
+            background-color: darkred;
+            color: white;
+        }
+
+        .blue{
+            background-color: darkblue;
+            color: white
+        }
+    </style>
+</head>
+
+<body>
+
+    <button onClick="send('command/useMode', 'idle')" class="green">
+        useMode => idle
+    </button>
+
+    <button onClick="send('command/useMode', 'learn')" class="green">
+        useMode => learn
+    </button>
+
+    <button onClick="send('command/useMode', 'predict')" class="green">
+        useMode => predict
+    </button>
+
+
+
+    <button onClick="sendMMG()" class="red">
+        MMG
+    </button>
+
+    <button onClick="sendEMG()" class="red">
+        EMG
+    </button>
+
+
+    <button onClick="cp()" class="blue">
+        Create Pipeline
+    </button>
+
+    <button onClick="start()" class="blue">
+        Start pipeline
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
+        type="text/javascript"></script>
+
+    <script>
+
+
+        client = new Paho.MQTT.Client("localhost", 8083, "BrowserClient");
+
+        client.onMessageArrived = onMessageArrived;
+
+        // connect the client
+        client.connect({ onSuccess: onConnect });
+
+        function onConnect() {
+            console.log("Connected");
+        }
+
+        // called when a message arrives
+        function onMessageArrived(message) {
+
+        }
+
+        function send(topic, payload) {
+            let message = new Paho.MQTT.Message(payload);
+            message.destinationName = topic;
+            client.send(message);
+        }
+
+
+        function sendMMG() {
+
+            let json = {
+                interface: "mmg"
+            }
+            let message = new Paho.MQTT.Message(JSON.stringify(json));
+            message.destinationName = "interfaces/use";
+            client.send(message);
+        }
+
+        function sendEMG() {
+
+            let json = {
+                interface: "emg"
+            }
+            let message = new Paho.MQTT.Message(JSON.stringify(json));
+            message.destinationName = "interfaces/use";
+            client.send(message);
+        }
+
+
+        function cp() {
+
+
+            let message = new Paho.MQTT.Message("");
+            message.destinationName = "command/cp";
+            client.send(message);
+        }
+
+        function start() {
+
+
+            let message = new Paho.MQTT.Message("");
+            message.destinationName = "command/start";
+            client.send(message);
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
