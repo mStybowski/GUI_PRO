@@ -2,107 +2,134 @@
 <html lang="en">
 
 <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>GUI</title>
 
     <style>
 
 
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body{
-            background-color: rgb(43, 49, 49);
+            background-color: #212121;
         }
 
+
         button{
-            padding: 3px 12px;
+            padding: 5px 14px;
+            min-width: 130px;
+            margin: 3px 1px;
+            border: none;
+            background: #323232;
+            font-size: 11px;
+            font-family: 'PT Sans', sans-serif;
+            font-weight: 700;
         }
 
         .green{
-            background-color: darkgreen;
-            color: white;
+            background-color: #00917C;
+            color: #212121;
+
+
         }
 
         .red{
-            background-color: darkred;
-            color: white;
+            background-color: #c4c4c4;
+            color: #212121;
         }
 
-        .blue{
-            background-color: darkblue;
-            color: white
+        .choice{
+            background-color: #276678;
+            color: white;
         }
     </style>
 </head>
 
 <body>
-<div id="top">
+<div class="row">
 
-    <button onClick="send('command/useMode', 'idle')" class="green">
+    <button onClick="send('command/useMode', 'idle')" class="choice">
         useMode => idle
     </button>
 
-    <button onClick="send('command/useMode', 'learn')" class="green">
+    <button onClick="send('command/useMode', 'learn')" class="choice">
         useMode => learn
     </button>
 
-    <button onClick="send('command/useMode', 'predict')" class="green">
+    <button onClick="send('command/useMode', 'predict')" class="choice">
         useMode => predict
     </button>
 
-
-
-    <button onClick="sendMMG()" class="red">
+</div>
+<div class="row">
+    <button onClick="sendMMG()" class="choice">
         MMG
     </button>
 
-    <button onClick="sendEMG()" class="red">
+    <button onClick="sendEMG()" class="choice">
         EMG
     </button>
+</div>
 
-
-    <button onClick="cp()" class="blue">
+<div class="row">
+    <button onClick="cp()" class="red">
         Create Pipeline
     </button>
 
-    <button onClick="start()" class="blue">
-        Start pipeline
+    <button onClick="dp()" class="green">
+        Destroy pipeline
     </button>
 </div>
-<div id="bottom">
-    <button onClick="send('command/gesture', 'idle')" class="blue">
+<div class="row">
+    <button onClick="start()" class="red">
+        Start Pipeline
+    </button>
+
+    <button onClick="stopp()" class="green">
+        Stop Pipeline
+    </button>
+</div>
+<div id="row">
+    <button onClick="send('command/gesture', 'idle')" class="choice">
         idle
     </button>
 
-    <button onClick="send('command/gesture', 'fist')" class="blue">
+    <button onClick="send('command/gesture', 'fist')" class="choice">
 
         fist
     </button>
-    <button onClick="send('command/gesture', 'flexion')" class="blue">
+    <button onClick="send('command/gesture', 'flexion')" class="choice">
 
         flexion
     </button>
-    <button onClick="send('command/gesture', 'extension')" class="blue">
+    <button onClick="send('command/gesture', 'extension')" class="choice">
 
         extension
     </button>
-    <button onClick="send('command/gesture', 'pinch_thumb-index')" class="blue">
+    <button onClick="send('command/gesture', 'pinch_thumb-index')" class="choice">
 
         pinch thumb index
     </button>
-    <button onClick="send('command/gesture', 'pinch_thumb-middle')" class="blue">
+    <button onClick="send('command/gesture', 'pinch_thumb-middle')" class="choice">
 
         pinch thumb middle
     </button>
-    <button onClick="send('command/gesture', 'pinch_thumb-ring')" class="blue">
+    <button onClick="send('command/gesture', 'pinch_thumb-ring')" class="choice">
 
     pinch thumb ring
     </button>
-    <button onClick="send('command/gesture', 'pinch_thumb-small')" class="blue">
+    <button onClick="send('command/gesture', 'pinch_thumb-small')" class="choice">
         pinch thumb small
     </button>
 
 </div>
 
-<div id="bot">
+<div class="row">
     <button onClick="send('command/startRecording', '')" class="red">
         RECORD
     </button>
@@ -111,14 +138,15 @@
     </button>
 </div>
 
-<div id="botter">
+<div class="row">
     <button onClick="sendSensorStart()" class="red">
-        START DATA :D
+        START DATA
     </button>
     <button onClick="sendSensorStop()" class="green">
-        STOP DATA :<
+        STOP DATA
     </button>
 </div>
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
@@ -205,6 +233,18 @@
 
             let message = new Paho.MQTT.Message(JSON.stringify(objJS));
             message.destinationName = "command/controlSensor";
+            client.send(message);
+        }
+
+        function dp(){
+            let message = new Paho.MQTT.Message("g");
+            message.destinationName = "command/destroyPipeline";
+            client.send(message);
+        }
+
+        function stopp(){
+            let message = new Paho.MQTT.Message("h");
+            message.destinationName = "command/stopPipeline";
             client.send(message);
         }
 
